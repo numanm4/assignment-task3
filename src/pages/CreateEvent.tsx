@@ -4,7 +4,6 @@ import { StackScreenProps } from '@react-navigation/stack';
 import * as ImagePicker from 'expo-image-picker';
 import * as api from '../services/api';
 import BigButton from '../components/BigButton';
-import Spacer from '../components/Spacer';
 import { Event } from '../types/Event';
 
 export default function CreateEvent({ navigation }: StackScreenProps<any>) {
@@ -40,13 +39,13 @@ export default function CreateEvent({ navigation }: StackScreenProps<any>) {
       const uri = result.assets[0].uri;
       const fileName = uri.split('/').pop() || 'unknown.jpg';
       const fileSize = result.assets[0].fileSize || 0;
-
+  
       try {
-        // Upload the image to FreeImageHost or another storage service
         const uploadResponse = await api.uploadImage(uri);
-        setImage(uploadResponse.data.image.display_url); // Use the URL returned by the service
+        setImage(uploadResponse.data.image.display_url);
         setImageDetails({ name: fileName, size: `${(fileSize / (1024 * 1024)).toFixed(2)} MB` });
       } catch (error) {
+        console.error('Full error object:', JSON.stringify(error, null, 2));
         Alert.alert('Upload failed', 'There was an issue uploading the image. Please try again.');
       }
     }
@@ -60,8 +59,8 @@ export default function CreateEvent({ navigation }: StackScreenProps<any>) {
         dateTime: `${date}T${time}:00.000Z`,
         position: { latitude: parseFloat(latitude), longitude: parseFloat(longitude) },
         volunteersNeeded: parseInt(volunteersNeeded),
-        imageUrl: image, // Include the uploaded image URL here
-        organizerId: 'someOrganizerId',
+        imageUrl: image,
+        organizerId: 'IWiVF-L',
         volunteersIds: [],
       };
 
@@ -75,66 +74,101 @@ export default function CreateEvent({ navigation }: StackScreenProps<any>) {
 
   return (
     <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        placeholder="Event Name"
-        value={name}
-        onChangeText={setName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Description"
-        value={description}
-        onChangeText={setDescription}
-        multiline
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Date (YYYY-MM-DD)"
-        value={date}
-        onChangeText={setDate}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Time (HH:MM)"
-        value={time}
-        onChangeText={setTime}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Latitude"
-        value={latitude}
-        onChangeText={setLatitude}
-        keyboardType="numeric"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Longitude"
-        value={longitude}
-        onChangeText={setLongitude}
-        keyboardType="numeric"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Volunteers Needed"
-        value={volunteersNeeded}
-        onChangeText={setVolunteersNeeded}
-        keyboardType="numeric"
-      />
-      <TouchableOpacity style={styles.imagePicker} onPress={handleImagePick}>
-        <Text>Pick an image</Text>
-      </TouchableOpacity>
-      {image && (
-        <View>
-          <Image source={{ uri: image }} style={styles.image} />
-          {imageDetails && (
-            <Text>{`${imageDetails.name} (${imageDetails.size})`}</Text>
-          )}
+      <View style={styles.formGroup}>
+        <Text style={styles.label}>Event Name</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Event Name"
+          value={name}
+          onChangeText={setName}
+        />
+      </View>
+
+      <View style={styles.formGroup}>
+        <Text style={styles.label}>About</Text>
+        <TextInput
+          style={styles.textArea}
+          placeholder="300 characters max."
+          value={description}
+          onChangeText={setDescription}
+          multiline
+        />
+      </View>
+
+      <View style={styles.formGroup}>
+        <Text style={styles.label}>Volunteers Needed</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Volunteers Needed"
+          value={volunteersNeeded}
+          onChangeText={setVolunteersNeeded}
+          keyboardType="numeric"
+        />
+      </View>
+
+      <View style={styles.inlineGroup}>
+        <View style={styles.formGroupInline}>
+          <Text style={styles.label}>Date</Text>
+          <TextInput
+            style={styles.inputInline}
+            placeholder="YYYY-MM-DD"
+            value={date}
+            onChangeText={setDate}
+          />
         </View>
-      )}
-      <Spacer size={20} />
+
+        <View style={styles.formGroupInline}>
+          <Text style={styles.label}>Time</Text>
+          <TextInput
+            style={styles.inputInline}
+            placeholder="HH:MM"
+            value={time}
+            onChangeText={setTime}
+          />
+        </View>
+      </View>
+
+      <View style={styles.inlineGroup}>
+        <View style={styles.formGroupInline}>
+          <Text style={styles.label}>Latitude</Text>
+          <TextInput
+            style={styles.inputInline}
+            placeholder="Latitude"
+            value={latitude}
+            onChangeText={setLatitude}
+            keyboardType="numeric"
+          />
+        </View>
+
+        <View style={styles.formGroupInline}>
+          <Text style={styles.label}>Longitude</Text>
+          <TextInput
+            style={styles.inputInline}
+            placeholder="Longitude"
+            value={longitude}
+            onChangeText={setLongitude}
+            keyboardType="numeric"
+          />
+        </View>
+      </View>
+
+      <View style={styles.formGroup}>
+        <Text style={styles.label}>Picture</Text>
+        <TouchableOpacity style={styles.imagePicker} onPress={handleImagePick}>
+          <Text style={styles.imagePickerText}>+</Text>
+        </TouchableOpacity>
+        {image && (
+          <View style={styles.imageContainer}>
+            <Image source={{ uri: image }} style={styles.image} />
+            {imageDetails && (
+              <Text>{`${imageDetails.name} (${imageDetails.size})`}</Text>
+            )}
+          </View>
+        )}
+      </View>
+
       <BigButton
-        label="Save Event"
+        label="Save"
         color="#00A3FF"
         onPress={handleSave}
         disabled={!isFormValid()}
@@ -146,25 +180,76 @@ export default function CreateEvent({ navigation }: StackScreenProps<any>) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    backgroundColor: '#F8FAFB',
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+  },
+  formGroup: {
+    marginBottom: 20,
+  },
+  formGroupInline: {
+    flex: 1,
+    marginRight: 10,
+  },
+  inlineGroup: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 14,
+    color: '#8E8E93',
+    marginBottom: 8,
   },
   input: {
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#ddd',
-    padding: 10,
-    marginBottom: 10,
-    borderRadius: 5,
+    borderColor: '#E5E5EA',
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    borderRadius: 8,
+  },
+  inputInline: {
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E5E5EA',
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    borderRadius: 8,
+    width: '100%',
+  },
+  textArea: {
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E5E5EA',
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    borderRadius: 8,
+    height: 100,
+    textAlignVertical: 'top',
   },
   imagePicker: {
-    backgroundColor: '#ddd',
-    padding: 10,
+    backgroundColor: '#F0F0F0',
+    borderWidth: 1,
+    borderColor: '#E5E5EA',
+    borderRadius: 8,
+    height: 100,
+    justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 5,
+    borderStyle: 'dashed',
+  },
+  imagePickerText: {
+    fontSize: 32,
+    color: '#8E8E93',
+  },
+  imageContainer: {
+    marginTop: 16,
+    alignItems: 'center',
   },
   image: {
-    width: 200,
-    height: 200,
-    resizeMode: 'cover',
-    marginTop: 10,
+    width: 150,
+    height: 150,
+    borderRadius: 8,
   },
 });
+

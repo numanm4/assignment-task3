@@ -1,24 +1,29 @@
 import axios, { AxiosResponse } from 'axios';
+import RNFS from 'react-native-fs';
 
-const imageApi = axios.create({
-  baseURL: 'https://freeimage.host/api/1/upload',
+export const imageApi = axios.create({
+  baseURL: 'https://freeimage.host/api/1',
   headers: { 'Content-Type': 'multipart/form-data' },
 });
 
 export const uploadImage = async (imageUri: string): Promise<AxiosResponse> => {
-  const formData = new FormData();
-  formData.append('source', {
-    uri: imageUri,
-    type: 'image/jpeg',
-    name: 'upload.jpg',
-  } as any);
-
-  formData.append('action', 'upload');
-  formData.append('type', 'file');
-  formData.append('key', '6d207e02198a847aa98d0a2a901485a5'); 
-
   try {
-    return await imageApi.post('/', formData);
+    const imageBase64 = await RNFS.readFile(imageUri, 'base64');
+
+    const formData = new FormData();
+    formData.append('source', `data:image/jpeg;base64,${imageBase64}`); 
+    formData.append('action', 'upload');
+    formData.append('key', '6d207e02198a847aa98d0a2a901485a5');
+    formData.append('format', 'json');
+
+    const response = await imageApi.post('/upload', formData);
+
+    if (response.data.status_code === 200) {
+      console.log('Image uploaded successfully:', response.data.image.display_url);
+      return response;
+    } else {
+      throw new Error(`Upload failed: ${response.data.status_txt}`);
+    }
   } catch (error) {
     console.error('Image upload error:', (error as any).response?.data || (error as any).message);
     throw error;

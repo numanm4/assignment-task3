@@ -27,7 +27,7 @@ export default function EventsMap(props: StackScreenProps<any>) {
     try {
       const fetchedEvents = await getFromNetworkFirst<Event[]>('events', api.getEvents());
   
-      // Adjust event date-time to compare correctly with current date in user's time zone
+      
       const futureEvents = fetchedEvents.filter(event => new Date(event.dateTime).getTime() >= new Date().getTime());
       setEvents(futureEvents);
     } catch (error) {

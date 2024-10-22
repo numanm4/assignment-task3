@@ -109,6 +109,48 @@
       "organizerId": "someOrganizerId",
       "volunteersIds": [],
       "id": "q7oUlkf"
+    },
+    {
+      "name": "Tennis",
+      "description": "Tennis practice",
+      "dateTime": "2025-03-06T12:30:00.000Z",
+      "position": {
+        "latitude": 54.123,
+        "longitude": -114.0136
+      },
+      "volunteersNeeded": 3,
+      "imageUrl": "https://unsplash.com/photos/a-tennis-ball-and-racket-on-a-tennis-court-dSeZlnp8DOA",
+      "organizerId": "IWiVF-L",
+      "volunteersIds": [],
+      "id": "MnjAi9M"
+    },
+    {
+      "name": "",
+      "description": "",
+      "dateTime": "T:00.000Z",
+      "position": {
+        "latitude": null,
+        "longitude": null
+      },
+      "volunteersNeeded": null,
+      "imageUrl": "https://freeimage.host/api/1/upload",
+      "organizerId": "IWiVF-L",
+      "volunteersIds": [],
+      "id": "myqIXE4"
+    },
+    {
+      "name": "Cooking Class",
+      "description": "teaching cooking to future chefs! ",
+      "dateTime": "2025-01-02T12:30:00.000Z",
+      "position": {
+        "latitude": 51.13217,
+        "longitude": -114.061875
+      },
+      "volunteersNeeded": 8,
+      "imageUrl": "https://freeimage.host/api/1/upload",
+      "organizerId": "IWiVF-L",
+      "volunteersIds": [],
+      "id": "l2ut5Ru"
     }
   ],
   "users": [
@@ -216,6 +258,26 @@
       "email": "numanbnr4@gmail.com",
       "password": "$2a$10$s3kuRi4Icx2gwZSOVy/cUOFVVF/fE81bckZHNY7gXQO/hj6ScLQH6",
       "id": "IWiVF-L"
+    }
+  ],
+  "upload": [
+    {
+      "id": 1
+    },
+    {
+      "id": 2
+    },
+    {
+      "id": 3
+    },
+    {
+      "id": 4
+    },
+    {
+      "id": 5
+    },
+    {
+      "id": 6
     }
   ]
 }

@@ -2,7 +2,7 @@ import axios, { AxiosResponse, AxiosError } from 'axios';
 import { Event } from '../types/Event';
 
 const api = axios.create({
-  baseURL: 'http://192.168.137.68:3333', // Ensure this URL is correct and accessible
+  baseURL: 'http://192.168.137.68:3333', 
 });
 
 // Authentication function to authenticate a user
@@ -22,7 +22,7 @@ export const createEvent = async (eventData: Partial<Event>): Promise<AxiosRespo
   } catch (error) {
     const axiosError = error as AxiosError;
     console.error('Error creating event:', axiosError.response?.data || axiosError.message);
-    throw axiosError; // Re-throwing the error to handle it appropriately in the caller
+    throw axiosError; 
   }
 };
 
@@ -42,6 +42,7 @@ export const uploadImage = async (imageUri: string): Promise<AxiosResponse> => {
   } catch (error) {
     const axiosError = error as AxiosError;
     console.error('Image upload error:', axiosError.response?.data || axiosError.message);
+    console.error('Full error object:', JSON.stringify(axiosError, null, 2));
     throw axiosError;
   }
 };
