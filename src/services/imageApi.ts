@@ -13,7 +13,7 @@ export const uploadImage = async (imageUri: string): Promise<AxiosResponse> => {
     const formData = new FormData();
     formData.append('source', `data:image/jpeg;base64,${imageBase64}`); 
     formData.append('action', 'upload');
-    formData.append('key', '6d207e02198a847aa98d0a2a901485a5');
+    formData.append('key', '**');
     formData.append('format', 'json');
 
     const response = await imageApi.post('/upload', formData);
